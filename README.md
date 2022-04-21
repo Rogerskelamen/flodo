@@ -1,16 +1,13 @@
-# to_do_list
+# flodo
 
-A new Flutter project.
+A new todo list project based on Flutter.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Yet another todo list app totally based on flutter.
 
-A few resources to get you started if this is your first Flutter project:
+You can build the app from the source code or you can quickly download the [release apk](https://github.com/Rogerskelamen/flodo/releases) (android provided only)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+If you want to modify the app in your own way, welcome and enjoy yourself!
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[Apache License 2.0](https://github.com/Rogerskelamen/flodo/blob/master/LICENSE)
