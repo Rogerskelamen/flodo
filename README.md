@@ -1,6 +1,8 @@
 # flodo
 
-A new todo list project based on Flutter.
+> A new todo list project based on Flutter.
+
+The idea of front-end style comes from [this video](https://www.bilibili.com/video/BV1Jt411u7RD)(extremely recommend this coder), in which the app is based on Swift. Shamefully, I'm not familiar with Swift, but on the contrary, I can rebuild it by Flutter. And I've just done that!
 
 ## Getting Started
 
