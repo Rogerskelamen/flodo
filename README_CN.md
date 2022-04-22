@@ -14,3 +14,5 @@
 您可以从源代码构建应用程序，也可以快速下载[已发布的apk](https://github.com/Rogerskelamen/flodo/releases)（仅提供Android版本）
 
 如果您想以自己的方式修改应用程序，非常欢迎，祝您愉快！
+
+项目处于[Apache License 2.0](https://github.com/Rogerskelamen/flodo/blob/master/LICENSE)开源协议下

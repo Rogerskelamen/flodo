@@ -3,7 +3,7 @@
 <a href="https://github.com/Rogerskelamen/flodo/releases"><img src="https://img.shields.io/github/v/release/Rogerskelamen/flodo?color=green&display_name=tag"></a>
 <a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache%202-blue"></a>
 
-[Read me in Chinese](https://github.com/Rogerskelamen/flodo/blob/master/README-CN.md)
+[Read me in Chinese](https://github.com/Rogerskelamen/flodo/blob/master/README_CN.md)
 
 > A new todo list project based on Flutter.
 
