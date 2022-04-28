@@ -45,13 +45,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   String _itemName = '';
   DateTime _date = DateTime.now();
 
-  List<TodoList> _todos = [
-    // TodoList(
-    //   itemName: '交科学上网费',
-    //   date: DateTime.now(),
-    //   isChecked: false
-    // )
-  ];
+  List<TodoList> _todos = [];
 
   // 初始化Widget
   @override
