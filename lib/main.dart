@@ -180,9 +180,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   onChanged: (value) {
                     setState(() {
                       _todos[index].isChecked = value!;
-                      // if (value == true) {
-
-                      // }
                     });
                   },
                 ),
@@ -213,7 +210,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                       children: [
                         // 取消按钮
                         Container(
-                          // color: Colors.blue,
                           margin: const EdgeInsets.only(left: 10.0, top: 50.0),
                           child: CupertinoButton(
                             child: const Text('取消', style: TextStyle(color: Colors.lightBlueAccent),),
@@ -282,15 +278,24 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                     // Date Picker
                     SizedBox(
                       height: 300.0,
-                      child: CupertinoDatePicker(
-                        mode: CupertinoDatePickerMode.date,
-                        dateOrder: DatePickerDateOrder.ymd,
-                        minimumDate: DateTime.now(),
-                        initialDateTime: DateTime.now(),
-                        onDateTimeChanged: (value) {
-                          _date = value;
-                        },
-                      ),
+                      child: CupertinoTheme(
+                        data: const CupertinoThemeData(
+                          textTheme: CupertinoTextThemeData(
+                            dateTimePickerTextStyle: TextStyle(
+                              fontSize: 22.0
+                            )
+                          )
+                        ),
+                        child: CupertinoDatePicker(
+                          mode: CupertinoDatePickerMode.date,
+                          dateOrder: DatePickerDateOrder.ymd,
+                          minimumDate: DateTime.now(),
+                          initialDateTime: DateTime.now(),
+                          onDateTimeChanged: (value) {
+                            _date = value;
+                          },
+                        ),
+                      )
                     )
                   ],
                 ),
