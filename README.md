@@ -17,4 +17,6 @@ You can build the app from the source code or you can quickly download the [rele
 
 If you want to modify the app in your own way, welcome and enjoy yourself!
 
-[Apache License 2.0](https://github.com/Rogerskelamen/flodo/blob/master/LICENSE)
+## LICENSE
+
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).

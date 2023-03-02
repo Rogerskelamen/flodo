@@ -15,4 +15,6 @@
 
 如果您想以自己的方式修改应用程序，非常欢迎，祝您愉快！
 
-项目处于[Apache License 2.0](https://github.com/Rogerskelamen/flodo/blob/master/LICENSE)开源协议下
+## 开源证书
+
+项目处于[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)开源协议下
