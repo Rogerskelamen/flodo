@@ -251,27 +251,6 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
           content: Text(
             getPlanDeadline(todo.date)
           ),
-          // actions: <CupertinoDialogAction>[
-          //   CupertinoDialogAction(
-          //     /// This parameter indicates this action is the default,
-          //     /// and turns the action's text to bold text.
-          //     isDefaultAction: true,
-          //     onPressed: () {
-          //       Navigator.pop(context);
-          //     },
-          //     child: const Text('No'),
-          //   ),
-          //   CupertinoDialogAction(
-          //     /// This parameter indicates the action would perform
-          //     /// a destructive action such as deletion, and turns
-          //     /// the action's text color to red.
-          //     isDestructiveAction: true,
-          //     onPressed: () {
-          //       Navigator.pop(context);
-          //     },
-          //     child: const Text('Yes'),
-          //   ),
-          // ],
         );
       },
     );
@@ -302,21 +281,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             // ==== Every todo list item ====
             // ==== Decoration for Each item ====
             return Container(
-              margin: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20.0),
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               decoration: BoxDecoration(
-                // color: Theme.of(context).colorScheme.secondary.computeLuminance() < 0.5 ? Colors.white : Colors.black38,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: Colors.black12,
                 ),
-                boxShadow: const [
-                  // BoxShadow(
-                  //   color: Colors.black26,
-                  //   offset: Offset(0, 0),
-                  //   blurRadius: 5.0
-                  // )
-                ]
               ),
               // ==== Structure of Each Tile ====
               child: CupertinoListTile(
