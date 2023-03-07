@@ -10,6 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 // import entity
 import './todo.dart';
 
+// import tools
+import './tools.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,13 +23,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'flodo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      darkTheme: ThemeData.dark(),
-      home: const MyHomePage(title: 'Todo List'),
+    return MediaQuery.fromWindow(
+      child: const CupertinoApp(
+        title: 'flodo',
+        home: MyHomePage(title: 'Todo List'),
+      )
     );
   }
 }
@@ -127,185 +128,237 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
+  void _addNewTodo(BuildContext context) {
+    // 点击弹出之后初始化所有可变数据
+    _date = DateTime.now();
+    _itemName = '';
+
+    showCupertinoModalPopup(
+      // 取消点击任意键之后可以退出
+      barrierDismissible: false,
+      context: context,
+      // 设置背景模糊
+      filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+      builder: (context) {
+        return Center(
+          child: Column(
+            children: [
+              // two button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // 取消按钮
+                  Container(
+                    margin: const EdgeInsets.only(left: 10.0, top: 50.0),
+                    child: CupertinoButton(
+                      child: const Text('取消'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      }
+                    ),
+                  ),
+                  // 确定按钮
+                  Container(
+                    margin: const EdgeInsets.only(right: 10.0, top: 50.0),
+                    child: CupertinoButton(
+                      child: const Text('确定'),
+                      onPressed: () {
+                        if (_itemName.isEmpty) {
+                          // 如果为空直接返回
+                          return;
+                        }
+                        setState(() {
+                          // 遍历所有待办查找那个待办正好在当前待办时间的后面
+                          for (var i = 0; i < _todos.length; i++) {
+                            if (_todos[i].date.isAfter(_date)) {
+                              _todos.insert(i,
+                                TodoList(
+                                  itemName: _itemName,
+                                  date: _date,
+                                  isChecked: false
+                                )
+                              );
+                              // 插入之后直接return退出
+                              return;
+                            }
+                          }
+                          // 如果还没有退出，说明当前的待办时间是最后的，直接加上
+                          _todos.add(TodoList(itemName: _itemName, date: _date, isChecked: false));
+                        });
+                        Navigator.of(context).pop();
+                      }
+                    ),
+                  )
+                ],
+              ),
+              // ==== 输入框区域 ====
+              Container(
+                height: 60.0,
+                padding: const EdgeInsets.only(left: 20.0),
+                child: CupertinoTextField(
+                  // 自动呼出键盘
+                  autofocus: true,
+                  // 设置输入框为透明
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent
+                  ),
+                  cursorHeight: 25.0,
+                  style: const TextStyle(
+                    fontSize: 25.0,
+                  ),
+                  // 接收输入框中的文字
+                  onChanged: (value) {
+                    _itemName = value;
+                  },
+                )
+              ),
+              // ==== Date Picker ====
+              SizedBox(
+                height: 300.0,
+                child: CupertinoTheme(
+                  data: const CupertinoThemeData(
+                    textTheme: CupertinoTextThemeData(
+                      dateTimePickerTextStyle: TextStyle(
+                        fontSize: 22.0
+                      )
+                    )
+                  ),
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.date,
+                    dateOrder: DatePickerDateOrder.ymd,
+                    minimumDate: DateTime.now(),
+                    initialDateTime: DateTime.now(),
+                    onDateTimeChanged: (value) {
+                      _date = value;
+                    },
+                  ),
+                )
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _todoTileOnTap(TodoList todo, BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(todo.itemName),
+          content: Text(
+            getPlanDeadline(todo.date)
+          ),
+          // actions: <CupertinoDialogAction>[
+          //   CupertinoDialogAction(
+          //     /// This parameter indicates this action is the default,
+          //     /// and turns the action's text to bold text.
+          //     isDefaultAction: true,
+          //     onPressed: () {
+          //       Navigator.pop(context);
+          //     },
+          //     child: const Text('No'),
+          //   ),
+          //   CupertinoDialogAction(
+          //     /// This parameter indicates the action would perform
+          //     /// a destructive action such as deletion, and turns
+          //     /// the action's text color to red.
+          //     isDestructiveAction: true,
+          //     onPressed: () {
+          //       Navigator.pop(context);
+          //     },
+          //     child: const Text('Yes'),
+          //   ),
+          // ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title, style: const TextStyle(fontSize: 24.0),),
-        centerTitle: true,
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(
+          widget.title,
+          style: const TextStyle(
+            fontSize: 20.0
+          ),
+        ),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Icon(CupertinoIcons.add_circled, size: 25,),
+          onPressed: () => _addNewTodo(context),
+        ),
       ),
-      body: Center(
+      // child: Center(),
+      child: Center(
         child: ListView.builder(
           itemCount: _todos.length,
           itemExtent: 92.0,
           itemBuilder: (BuildContext context, int index) {
-            // every todo list item
+            // ==== Every todo list item ====
+            // ==== Decoration for Each item ====
             return Container(
               margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary.computeLuminance() < 0.5 ? Colors.white : Colors.black38,
+                // color: Theme.of(context).colorScheme.secondary.computeLuminance() < 0.5 ? Colors.white : Colors.black38,
                 borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color: Colors.black12,
+                ),
                 boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 0),
-                    blurRadius: 5.0
-                  )
+                  // BoxShadow(
+                  //   color: Colors.black26,
+                  //   offset: Offset(0, 0),
+                  //   blurRadius: 5.0
+                  // )
                 ]
               ),
-              child: ListTile(
-                style: ListTileStyle.drawer,
-                leading: const Icon(Icons.domain_verification_sharp, size: 40,),
+              // ==== Structure of Each Tile ====
+              child: CupertinoListTile(
+                leading: const Icon(CupertinoIcons.calendar_today, size: 40,),
                 // 待办事项名
-                title: Text(_todos[index].itemName, style: const TextStyle(fontSize: 20),),
+                title: Text(
+                  _todos[index].itemName,
+                  style: const TextStyle(fontSize: 20),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                // 下方的待办事项时间
                 subtitle: Row(
                   children: [
                     Container(
                       margin: const EdgeInsets.only(right: 5.0),
-                      child: const Icon(Icons.access_time, size: 16),
+                      child: const Icon(CupertinoIcons.time, size: 16),
                     ),
                     // 显示时间
-                    Text(_todos[index].date.day.toString() + '-' + _todos[index]
-                      .date.month.toString() + '-' + _todos[index].date.year
+                    Text(_todos[index].date.month.toString() + '-' + _todos[index]
+                      .date.day.toString() + '-' + _todos[index].date.year
                       .toString() + ' ' + getWeek(_todos[index].date.weekday),
                       style: const TextStyle(fontStyle: FontStyle.italic),
                     )
                   ],
                 ),
                 // 尾部单选框
-                trailing: Checkbox(
+                trailing: CupertinoSwitch(
                   // 设置为每个待办的状态
                   value: _todos[index].isChecked,
                   activeColor: Colors.blue,
                   onChanged: (value) {
                     setState(() {
-                      _todos[index].isChecked = value!;
+                      _todos[index].isChecked = value;
                     });
                   },
                 ),
+                onTap: () => _todoTileOnTap(_todos[index], context),
               )
             );
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // 点击弹出之后初始化所有可变数据
-          _date = DateTime.now();
-          _itemName = '';
-
-          showCupertinoModalPopup(
-            // 取消点击任意键之后可以退出
-            barrierDismissible: false,
-            context: context,
-            // 设置背景模糊
-            filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-            builder: (context) {
-              return Center(
-                child: Column(
-                  children: [
-                    // two button
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // 取消按钮
-                        Container(
-                          margin: const EdgeInsets.only(left: 10.0, top: 50.0),
-                          child: CupertinoButton(
-                            child: const Text('取消', style: TextStyle(color: Colors.lightBlueAccent),),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            }
-                          ),
-                        ),
-                        // 确定按钮
-                        Container(
-                          margin: const EdgeInsets.only(right: 10.0, top: 50.0),
-                          child: CupertinoButton(
-                            child: const Text('确定', style: TextStyle(color: Colors.lightBlueAccent),),
-                            onPressed: () {
-                              if (_itemName.isEmpty) {
-                                // 如果为空直接返回
-                                return;
-                              }
-                              setState(() {
-                                // 遍历所有待办查找那个待办正好在当前待办时间的后面
-                                for (var i = 0; i < _todos.length; i++) {
-                                  if (_todos[i].date.isAfter(_date)) {
-                                    _todos.insert(i,
-                                      TodoList(
-                                        itemName: _itemName,
-                                        date: _date,
-                                        isChecked: false
-                                      )
-                                    );
-                                    // 插入之后直接return退出
-                                    return;
-                                  }
-                                }
-                                // 如果还没有退出，说明当前的待办时间是最后的，直接加上
-                                _todos.add(TodoList(itemName: _itemName, date: _date, isChecked: false));
-                              });
-                              Navigator.of(context).pop();
-                            }
-                          ),
-                        )
-                      ],
-                    ),
-                    // Text Field
-                    Container(
-                      height: 60.0,
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: CupertinoTextField(
-                        // 自动呼出键盘
-                        autofocus: true,
-                        // 设置输入框为透明
-                        decoration: const BoxDecoration(
-                          color: Colors.transparent
-                        ),
-                        cursorHeight: 32.0,
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          // 字体色随主题色渐变
-                          color: Theme.of(context).colorScheme.secondary.computeLuminance() > 0.5 ? Colors.white : Colors.black,
-                        ),
-                        // 接收输入框中的文字
-                        onChanged: (value) {
-                          _itemName = value;
-                        },
-                      )
-                    ),
-                    // Date Picker
-                    SizedBox(
-                      height: 300.0,
-                      child: CupertinoTheme(
-                        data: const CupertinoThemeData(
-                          textTheme: CupertinoTextThemeData(
-                            dateTimePickerTextStyle: TextStyle(
-                              fontSize: 22.0
-                            )
-                          )
-                        ),
-                        child: CupertinoDatePicker(
-                          mode: CupertinoDatePickerMode.date,
-                          dateOrder: DatePickerDateOrder.ymd,
-                          minimumDate: DateTime.now(),
-                          initialDateTime: DateTime.now(),
-                          onDateTimeChanged: (value) {
-                            _date = value;
-                          },
-                        ),
-                      )
-                    )
-                  ],
-                ),
-              );
-            },
-          );
-        },
-        tooltip: '添加待办事项',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      )
     );
   }
 }
