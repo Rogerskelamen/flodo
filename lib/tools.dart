@@ -20,14 +20,14 @@ String getWeek (int date) {
 }
 
 getPlanDeadline(DateTime date) {
-  Duration deadline = date.difference(DateTime.now());
+  int deadline = date.day - DateTime.now().day;
   String retStr = '';
-  if (deadline.inDays == 0) {
+  if (deadline == 0) {
     retStr = '计划今天完成';
-  }else if (deadline.inDays == 1) {
+  }else if (deadline == 1) {
     retStr = '计划明天完成';
   }else {
-    retStr = '离计划的时间还有' + deadline.inDays.toString() + '天';
+    retStr = '离计划的时间还有' + deadline.toString() + '天';
   }
 
   return retStr;
