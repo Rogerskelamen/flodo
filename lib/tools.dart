@@ -35,17 +35,16 @@ getPlanDeadline(DateTime date) {
 
   // judge if the plan day has been passed
   int dayInterval = date.day - DateTime.now().day;
-  if (date.isBefore(DateTime.now()) && dayInterval < 0) {
-    return '你应该已经完成它了';
-  }
   Duration passTime = date.difference(DateTime.now());
   String retStr = '';
   if (passTime.inDays == 0 && dayInterval == 0) {
     retStr = '计划今天完成';
-  }else if (passTime.inDays == 0 && dayInterval == 1) {
+  }else if ((passTime.inDays == 0 || passTime.inDays == 1) && dayInterval == 1) {
     retStr = '计划明天完成';
-  }else {
+  }else if (passTime.inDays >= 1 && dayInterval >= 2){
     retStr = '离计划的时间还有' + (passTime.inDays + 1).toString() + '天';
+  }else {
+    retStr = '你应该已经完成它了';
   }
 
   return retStr;
