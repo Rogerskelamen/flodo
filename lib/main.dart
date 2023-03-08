@@ -263,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         middle: Text(
           widget.title,
           style: const TextStyle(
-            fontSize: 20.0
+            fontSize: 26.0
           ),
         ),
         trailing: CupertinoButton(
@@ -292,6 +292,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
               // ==== Structure of Each Tile ====
               child: CupertinoListTile(
                 leading: const Icon(CupertinoIcons.calendar_today, size: 40,),
+                leadingSize: 40,
                 // 待办事项名
                 title: Text(
                   _todos[index].itemName,
